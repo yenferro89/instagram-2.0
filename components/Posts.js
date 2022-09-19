@@ -4,7 +4,7 @@ import Post from "./Post";
 const posts = [
   {
     id: 123,
-    username: "yenferro",
+    username: "PapaReact",
     userImg: "https://links.papareact.com/3ke",
     img: "https://links.papareact.com/3ke",
     caption: "This is cool!!!",

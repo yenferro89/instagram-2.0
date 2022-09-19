@@ -58,7 +58,7 @@ function Header() {
           <PlusCircleIcon className="navBtn" />
           <UserGroupIcon className="navBtn" />
           <HeartIcon className="navBtn" />
-          <img src="/IMG_0635.JPG" alt="image" className="h-10 w-10 rounded-full flex-shrink-0"/>
+          <img src="/71678069.jpeg" alt="image" className="h-10 w-10 rounded-full flex-shrink-0"/>
         </div>
       </div>
     </div>
