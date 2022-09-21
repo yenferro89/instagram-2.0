@@ -9,9 +9,11 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import { HomeIcon } from "@heroicons/react/24/solid";
-
+import { useSession, signIn, signOut } from "next-auth/react"
 
 function Header() {
+  const { data: session } = useSession();
+
   return (
     <div className=" shadow-sm border-b bg-white top-0 z-50 sticky">
       <div className="flex justify-between max-w-6xl mx-4 lg:px-5 lg:mx-auto">
@@ -49,6 +51,9 @@ function Header() {
         <div className="flex items-center justify-end space-x-4">
           <HomeIcon className="navBtn" />
           <Bars3Icon className="h-6 md:hidden flex-shrink-0 cursor-pointer" />
+
+        {session ? (
+          <>
           <div className="relative navBtn">
             <div className="absolute w-5 h-5  text-white text-xs -top-1 -right-2 flex items-center justify-center rounded-full bg-red-500 animate-pulse">
               3
@@ -58,7 +63,17 @@ function Header() {
           <PlusCircleIcon className="navBtn" />
           <UserGroupIcon className="navBtn" />
           <HeartIcon className="navBtn" />
-          <img src="/71678069.jpeg" alt="image" className="h-10 w-10 rounded-full flex-shrink-0"/>
+          <img
+            onClick={ signOut }
+            src={ session.user.image }
+            alt="image"
+            className="h-10 w-10 rounded-full flex-shrink-0 cursor-pointer"
+          />
+          </>
+
+        ) : (
+          <button onClick={signIn}>Sign In</button>
+        )}  
         </div>
       </div>
     </div>
