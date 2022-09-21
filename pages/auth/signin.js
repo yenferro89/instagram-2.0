@@ -6,10 +6,10 @@ function signIn({ providers }) {
   return (
     <div>
       <Header />
-      <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-56 px-14 text-center">
+      <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-40 px-14 text-center">
         <img className="w-80" src="https://links.papareact.com/ocw"/>
         <p className="italic text-sms">This is not a real app, it is built for educational pusposes only</p>
-        <div className="mt-40">
+        <div className="mt-20">
           {Object.values(providers).map((provider) => (
             <div key={provider.name}>
               <button
