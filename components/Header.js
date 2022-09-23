@@ -11,23 +11,32 @@ import {
 import { HomeIcon } from "@heroicons/react/24/solid";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { modalAtom } from "../atoms/modalAtom";
 
 function Header() {
   const { data: session } = useSession();
   const router = useRouter();
+  const [open, setOpen] = useRecoilState(modalAtom);
 
   return (
     <div className=" shadow-sm border-b bg-white top-0 z-50 sticky">
       <div className="flex justify-between max-w-6xl mx-4 lg:px-5 lg:mx-auto">
         {/* Left */}
-        <div onClick={() => router.push('/')} className="relative hidden lg:inline-grid w-24 cursor-pointer">
+        <div
+          onClick={() => router.push("/")}
+          className="relative hidden lg:inline-grid w-24 cursor-pointer"
+        >
           <Image
             src="https://links.papareact.com/ocw"
             layout="fill"
             objectFit="contain"
           />
         </div>
-        <div onClick={() => router.push('/')} className="relative lg:hidden w-10 flex-shrink-0 cursor-pointer">
+        <div
+          onClick={() => router.push("/")}
+          className="relative lg:hidden w-10 flex-shrink-0 cursor-pointer"
+        >
           <Image
             src="https://links.papareact.com/jjm"
             layout="fill"
@@ -51,7 +60,7 @@ function Header() {
 
         {/* Right */}
         <div className="flex items-center justify-end space-x-4">
-          <HomeIcon onClick={() => router.push('/')} className="navBtn" />
+          <HomeIcon onClick={() => router.push("/")} className="navBtn" />
           <Bars3Icon className="h-6 md:hidden flex-shrink-0 cursor-pointer" />
 
           {session ? (
@@ -62,7 +71,7 @@ function Header() {
                 </div>
                 <PaperAirplaneIcon className="navBtn -rotate-45" />
               </div>
-              <PlusCircleIcon className="navBtn" />
+              <PlusCircleIcon onClick={() => setOpen(!open)} className="navBtn" />
               <UserGroupIcon className="navBtn" />
               <HeartIcon className="navBtn" />
               <img

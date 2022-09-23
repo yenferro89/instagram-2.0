@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Feed from '../components/Feed'
 import Header from '../components/Header'
+import Modal from '../components/Modal'
 
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
         <title>Instagram Clone</title>
         <link rel="icon" href="/insta-logo.png" />
       </Head>
+      <Modal/>
       <Header/> 
       <Feed/>    
     </div>
