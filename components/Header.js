@@ -71,7 +71,7 @@ function Header() {
                 </div>
                 <PaperAirplaneIcon className="navBtn -rotate-45" />
               </div>
-              <PlusCircleIcon onClick={() => setOpen(!open)} className="navBtn" />
+              <PlusCircleIcon onClick={() => setOpen(true)} className="navBtn" />
               <UserGroupIcon className="navBtn" />
               <HeartIcon className="navBtn" />
               <img
