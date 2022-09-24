@@ -66,7 +66,7 @@ function Header() {
           {session ? (
             <>
               <div className="relative navBtn">
-                <div className="absolute w-5 h-5  text-white text-xs -top-1 -right-2 flex items-center justify-center rounded-full bg-red-500 animate-pulse">
+                <div className="absolute w-5 h-5 text-white text-xs -top-1 -right-2 flex items-center justify-center rounded-full bg-red-500 animate-pulse">
                   3
                 </div>
                 <PaperAirplaneIcon className="navBtn -rotate-45" />
@@ -74,7 +74,7 @@ function Header() {
               <PlusCircleIcon onClick={() => setOpen(true)} className="navBtn" />
               <UserGroupIcon className="navBtn" />
               <HeartIcon className="navBtn" />
-              <img
+              <img 
                 onClick={signOut}
                 src={session.user.image}
                 alt="image"

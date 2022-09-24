@@ -11,9 +11,9 @@ export default function Home() {
         <title>Instagram Clone</title>
         <link rel="icon" href="/insta-logo.png" />
       </Head>
-      <Modal/>
       <Header/> 
       <Feed/>    
+      <Modal/>
     </div>
       
   )
