@@ -2,6 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment } from "react";
 import { useRecoilState } from "recoil";
 import { modalAtom } from "../atoms/modalAtom";
+import { CameraIcon } from "@heroicons/react/24/outline";
 
 function Modal() {
   const [open, setOpen] = useRecoilState(modalAtom);
@@ -45,21 +46,24 @@ function Modal() {
             shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
             >
               <div>
+                <div className="flex mx-auto items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                  <CameraIcon
+                    className="h-6 w-6 text-red-600"
+                    aria-hidden="true"
+                  />
+                </div>
                 <div className="mt-3 text-center sm:mt-5">
                   <Dialog.Title
                     as="h3"
                     className="text-lg leading-6 font-medium text-gray-900"
-                    >
-                      Upload a photo
+                  >
+                    Upload a photo
                   </Dialog.Title>
                   <div>
-                    <input 
-                      type="file"
-                      hidden
-                    />
+                    <input type="file" hidden />
                   </div>
                   <div className="mt-2">
-                    <input 
+                    <input
                       className="border-none focus:ring-0 w-full text-center"
                       type="text"
                       placeholder="Please enter a caption..."
