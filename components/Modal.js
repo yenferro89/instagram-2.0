@@ -5,6 +5,7 @@ import { modalAtom } from "../atoms/modalAtom";
 import { CameraIcon } from "@heroicons/react/24/outline";
 import { db, storage } from "../firebase";
 import {
+  addDoc,
   collection,
   doc,
   serverTimestamp,
@@ -39,7 +40,7 @@ function Modal() {
     const imageRef = ref(storage, `posts/${docRef.id}/image`);
 
     await uploadString(imageRef, selectedFile, "data_url").then(
-      async (snapshot) => {
+      async ( snapshot ) => {
         const downloadURL = await getDownloadURL(imageRef);
         await updateDoc(doc(db, "posts", docRef.id), {
           image: downloadURL,
