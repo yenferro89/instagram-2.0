@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BookmarkIcon,
   ChatBubbleOvalLeftEllipsisIcon,
@@ -7,6 +7,17 @@ import {
   HeartIcon,
   PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
+import { db } from "../firebase";
 import { useSession } from "next-auth/react";
 
 function Post({ id, username, userImg, img, caption }) {
@@ -14,12 +25,31 @@ function Post({ id, username, userImg, img, caption }) {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
+  useEffect(() => {
+    onSnapshot(
+      query(
+        collection(db, "posts", id, "comments"),
+        orderBy("timestamp", "desc")
+      ),
+      (snapshot) => setComments(snapshot.docs)
+    );
+  }, [db]);
+
   const sendComment = async (e) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+
+    const commentToSend = comment;
+    setComment("");
+    await addDoc(collection(db, "posts", id, "comments"), {
+      comment: commentToSend,
+      username: session.user.username,
+      userImage: session.user.image,
+      timestamp: serverTimestamp(),
+    });
+  };
 
   return (
-    <div className=" bg-white my-7 border rounded-sm">
+    <div className=" bg-white my-5 border rounded-sm">
       {/* Header */}
       <div className="flex items-center p-5">
         <img
@@ -50,7 +80,22 @@ function Post({ id, username, userImg, img, caption }) {
         <span className=" font-bold mr-1">{username}</span>
         {caption}
       </p>
+
       {/* Comments */}
+      {comments.length > 0 && (
+        <div className="ml-10 h-20 overflow-y-scroll scrollbar-thumb-black scrollbar-thin">
+          {comments.map((comment) => (
+            <div key={comment.id} className="flex items-center space-x-2 mb-3">
+              <img
+                className="h-7 rounded-full"
+                src={comment.data().userImage}
+              />
+              <p>{comment.data().comment}</p>
+
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Input box*/}
       {session && (
