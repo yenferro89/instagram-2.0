@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   BookmarkIcon,
   ChatBubbleOvalLeftEllipsisIcon,
@@ -8,15 +9,19 @@ import {
   PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
 import {
+  HeartIcon as HeartIconFilled,
+} from "@heroicons/react/24/solid";
+
+import {
   addDoc,
   collection,
   doc,
   serverTimestamp,
-  updateDoc,
   onSnapshot,
   orderBy,
   query,
   setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useSession } from "next-auth/react";
@@ -27,7 +32,7 @@ function Post({ id, username, userImg, img, caption }) {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [likes, setLikes] = useState([]);
-  const [hasLiked, setHasLiked] = useState(false)
+  const [hasLiked, setHasLiked] = useState(false);
 
   useEffect(() => {
     onSnapshot(
@@ -46,6 +51,14 @@ function Post({ id, username, userImg, img, caption }) {
       [db, id];
   });
 
+  useEffect(
+    () =>
+      setHasLiked(
+        likes.findIndex((like) => like.id === session?.user?.uid) !== -1
+      ),
+    [likes]
+  );
+
   const sendComment = async (e) => {
     e.preventDefault();
 
@@ -60,9 +73,13 @@ function Post({ id, username, userImg, img, caption }) {
   };
 
   const likePost = async () => {
-    await setDoc(doc(db, "post", id, "likes", session.user.uid), {
-      username: session.user.username
-    });
+    if (hasLiked) {
+      await deleteDoc(doc(db, "posts", id, "likes", session.user.uid));
+    } else {
+      await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
+        username: session.user.username,
+      });
+    }
   };
 
   return (
@@ -84,7 +101,12 @@ function Post({ id, username, userImg, img, caption }) {
       {session && (
         <div className="flex justify-between px-4 py-4">
           <div className="flex space-x-4">
-            <HeartIcon onClick={likePost} className="btn" />
+            {hasLiked ? (
+              <HeartIconFilled onClick={likePost} className="btn text-red-500"/>
+
+            ):(
+              <HeartIcon onClick={likePost} className="btn" />
+            )}
             <ChatBubbleOvalLeftEllipsisIcon className="btn" />
             <PaperAirplaneIcon className="btn -rotate-45" />
           </div>
