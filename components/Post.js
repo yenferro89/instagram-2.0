@@ -7,8 +7,11 @@ import {
   HeartIcon,
   PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
+import { useSession } from "next-auth/react";
 
-function Post({ id, username, userImg, caption }) {
+function Post({ id, username, userImg, img, caption }) {
+  const { data: session } = useSession();
+
   return (
     <div className=" bg-white my-7 border rounded-sm">
       {/* Header */}
@@ -22,17 +25,19 @@ function Post({ id, username, userImg, caption }) {
       </div>
 
       {/* Image */}
-      <img src={userImg} className="object-cover w-full" />
+      <img src={img} className="object-cover w-full" />
 
       {/* Buttons */}
-      <div className="flex justify-between px-4 py-4">
-        <div className="flex space-x-4">
-          <HeartIcon className="btn" />
-          <ChatBubbleOvalLeftEllipsisIcon className="btn" />
-          <PaperAirplaneIcon className="btn -rotate-45" />
+      {session && (
+        <div className="flex justify-between px-4 py-4">
+          <div className="flex space-x-4">
+            <HeartIcon className="btn" />
+            <ChatBubbleOvalLeftEllipsisIcon className="btn" />
+            <PaperAirplaneIcon className="btn -rotate-45" />
+          </div>
+          <BookmarkIcon className="btn" />
         </div>
-        <BookmarkIcon className="btn" />
-      </div>
+      )}
 
       {/* Captions */}
       <p className="p-5 truncate">
@@ -40,17 +45,19 @@ function Post({ id, username, userImg, caption }) {
         {caption}
       </p>
       {/* Comments */}
-
+      
       {/* Input box*/}
-      <form className="flex items-center p-4">
-        <FaceSmileIcon className="h-7" />
-        <input
-          type="Text"
-          placeholder="Add a comment..."
-          className=" border-none flex-1 focus:ring-0 outline-none"
-        />
-        <button className=" font-semibold text-blue-400">Post</button>
-      </form>
+      {session && (
+        <form className="flex items-center p-4">
+          <FaceSmileIcon className="h-7" />
+          <input
+            type="Text"
+            placeholder="Add a comment..."
+            className=" border-none flex-1 focus:ring-0 outline-none"
+          />
+          <button className=" font-semibold text-blue-400">Post</button>
+        </form>
+      )}
     </div>
   );
 }
