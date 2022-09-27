@@ -16,14 +16,18 @@ import {
   onSnapshot,
   orderBy,
   query,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { useSession } from "next-auth/react";
+import Moment from "react-moment";
 
 function Post({ id, username, userImg, img, caption }) {
   const { data: session } = useSession();
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
+  const [likes, setLikes] = useState([]);
+  const [hasLiked, setHasLiked] = useState(false)
 
   useEffect(() => {
     onSnapshot(
@@ -33,7 +37,14 @@ function Post({ id, username, userImg, img, caption }) {
       ),
       (snapshot) => setComments(snapshot.docs)
     );
-  }, [db]);
+  }, [db, id]);
+
+  useEffect(() => {
+    onSnapshot(collection(db, "posts", id, "likes"), (snapshot) =>
+      setLikes(snapshot.docs)
+    ),
+      [db, id];
+  });
 
   const sendComment = async (e) => {
     e.preventDefault();
@@ -45,6 +56,12 @@ function Post({ id, username, userImg, img, caption }) {
       username: session.user.username,
       userImage: session.user.image,
       timestamp: serverTimestamp(),
+    });
+  };
+
+  const likePost = async () => {
+    await setDoc(doc(db, "post", id, "likes", session.user.uid), {
+      username: session.user.username
     });
   };
 
@@ -67,7 +84,7 @@ function Post({ id, username, userImg, img, caption }) {
       {session && (
         <div className="flex justify-between px-4 py-4">
           <div className="flex space-x-4">
-            <HeartIcon className="btn" />
+            <HeartIcon onClick={likePost} className="btn" />
             <ChatBubbleOvalLeftEllipsisIcon className="btn" />
             <PaperAirplaneIcon className="btn -rotate-45" />
           </div>
@@ -90,8 +107,13 @@ function Post({ id, username, userImg, img, caption }) {
                 className="h-7 rounded-full"
                 src={comment.data().userImage}
               />
-              <p>{comment.data().comment}</p>
-
+              <p className=" text-sm flex-1">
+                <span className=" font-bold">{comment.data().username}</span>{" "}
+                {comment.data().comment}
+              </p>
+              <Moment fromNow className="pr-5 text-xs">
+                {comment.data().timestamp?.toDate()}
+              </Moment>
             </div>
           ))}
         </div>
