@@ -8,9 +8,7 @@ import {
   HeartIcon,
   PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
-import {
-  HeartIcon as HeartIconFilled,
-} from "@heroicons/react/24/solid";
+import { HeartIcon as HeartIconFilled } from "@heroicons/react/24/solid";
 
 import {
   addDoc,
@@ -102,9 +100,11 @@ function Post({ id, username, userImg, img, caption }) {
         <div className="flex justify-between px-4 py-4">
           <div className="flex space-x-4">
             {hasLiked ? (
-              <HeartIconFilled onClick={likePost} className="btn text-red-500"/>
-
-            ):(
+              <HeartIconFilled
+                onClick={likePost}
+                className="btn text-red-500"
+              />
+            ) : (
               <HeartIcon onClick={likePost} className="btn" />
             )}
             <ChatBubbleOvalLeftEllipsisIcon className="btn" />
